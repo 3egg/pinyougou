@@ -7,11 +7,13 @@
     <groupId>com.pinyougou</groupId>
     <artifactId>pinyougou-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
+
     <modules>
         <module>pinyougou-common</module>
         <module>pinyougou-sellergoods-interface</module>
         <module>pinyougou-manager-web</module>
     </modules>
+
     <packaging>pom</packaging>
 
     <!-- FIXME change it to the project's website -->
@@ -343,6 +345,45 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.12.4</version>
                 </plugin>
+                <!--清理插件 用于清理target中的所有的内容，包括parent以及parent下的所有的子项目中的target-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>2.6.1</version>
+                    <configuration>
+                        <filesets>
+                            <fileset>
+                                <directory>${basedir}/pinyougou-common/target</directory>
+                                <followSymlinks>false</followSymlinks>
+                            </fileset>
+                            <fileset>
+                                <directory>${basedir}/pinyougou-pojo/target</directory>
+                                <followSymlinks>false</followSymlinks>
+                            </fileset>
+                            <fileset>
+                                <directory>${basedir}/pinyougou-dao/target</directory>
+                                <followSymlinks>false</followSymlinks>
+                            </fileset>
+                            <fileset>
+                                <directory>${basedir}/pinyougou-sellergoods-interface/target</directory>
+                                <followSymlinks>false</followSymlinks>
+                            </fileset>
+                            <fileset>
+                                <directory>${basedir}/pinyougou-sellergoods-service/target</directory>
+                                <followSymlinks>false</followSymlinks>
+                            </fileset>
+                            <fileset>
+                                <directory>${basedir}/pinyougou-sellergoods-interface/target</directory>
+                                <followSymlinks>false</followSymlinks>
+                            </fileset>
+                            <fileset>
+                                <directory>${basedir}/pinyougou-manager-web/target</directory>
+                                <followSymlinks>false</followSymlinks>
+                            </fileset>
+                        </filesets>
+                    </configuration>
+                </plugin>
+
             </plugins>
         </pluginManagement>
     </build>

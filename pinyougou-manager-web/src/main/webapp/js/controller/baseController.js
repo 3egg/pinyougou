@@ -1,12 +1,11 @@
-//基本控制层
-//共享$scope这个页面范围出来的对象
-//即一些通用的配置参数可以写到这里来
+//品牌控制层
 app.controller('baseController', function ($scope) {
+
     //重新加载列表 数据
     $scope.reloadList = function () {
         //切换页码
         $scope.search($scope.paginationConf.currentPage, $scope.paginationConf.itemsPerPage);
-    };
+    }
 
     //分页控件配置
     $scope.paginationConf = {
@@ -20,15 +19,29 @@ app.controller('baseController', function ($scope) {
     };
 
     $scope.selectIds = [];//选中的ID集合
+
     //更新复选
     $scope.updateSelection = function ($event, id) {
         if ($event.target.checked) {//如果是被选中,则增加到数组
             $scope.selectIds.push(id);
         } else {
             var idx = $scope.selectIds.indexOf(id);
-            $scope.selectIds.splice(idx, 1);//删除
+            $scope.selectIds.splice(idx, 1);//删除 
         }
+    };
+
+    //提供给json字符串,返回拼接后面的字符串,逗号分割
+    $scope.jsonToString = function (jsonString, key) {
+        var json = JSON.parse(jsonString);
+        var value = "";
+        for (var i = 0; i < json.length; i++) {
+            if(i > 0){
+                value += ",";
+            }
+            //拼接字符串
+            value += json[i][key];
+        }
+        return value;
     }
 
-});
-
+});	

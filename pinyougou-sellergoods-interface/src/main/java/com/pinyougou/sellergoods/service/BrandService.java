@@ -1,9 +1,10 @@
 package com.pinyougou.sellergoods.service;
 
-import com.pinyougou.entity.PageResult;
+import entity.PageResult;
 import com.pinyougou.pojo.TbBrand;
 
 import java.util.List;
+import java.util.Map;
 
 public interface BrandService {
 
@@ -25,7 +26,8 @@ public interface BrandService {
     //批量删除
     void delete(Long[] ids);
 
-
+    //获取所有的品牌下拉框,因为sql写的是from TbBrand
+    List<Map> selectOptionList();
 
 
 }
