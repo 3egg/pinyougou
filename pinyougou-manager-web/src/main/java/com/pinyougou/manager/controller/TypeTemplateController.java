@@ -78,7 +78,7 @@ public class TypeTemplateController {
 	 * @return
 	 */
 	@RequestMapping("/findOne")
-	public TbTypeTemplate findOne(Long id){
+	public TbTypeTemplate findOne(Long id){//{xx:aa}
 		return typeTemplateService.findOne(id);		
 	}
 	

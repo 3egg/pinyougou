@@ -105,7 +105,7 @@ public class SpecificationServiceImpl implements SpecificationService {
         List<TbSpecificationOption> tbSpecificationOptionList = specificationOptionMapper.selectByExample(example);
         //然后创建一个空的specification对象把从数据库查到的值set进去
         Specification specification = new Specification();
-        //根据页面传过来的id找到了对应的    tbSpecification
+        //根据页面传过来的id找到了对应的 tbSpecification
         specification.setSpecification(tbSpecification);
         //根据tbSpecification的id找到对应的specid找到对应的tbSpecificationOption集合set进去
         specification.setSpecificationOptionList(tbSpecificationOptionList);

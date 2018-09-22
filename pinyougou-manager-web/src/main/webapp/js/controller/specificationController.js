@@ -34,7 +34,7 @@ app.controller('specificationController', function ($scope, $controller, specifi
     //保存
     $scope.save = function () {
         var serviceObject;//服务层对象
-        if ($scope.entity.specification.id != null) {//如果有ID
+        if ($scope.entity.specification.id != null) {//如果有循环遍历的entity对象中的specification的ID有值
             serviceObject = specificationService.update($scope.entity); //修改
         } else {
             serviceObject = specificationService.add($scope.entity);//增加

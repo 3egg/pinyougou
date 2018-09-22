@@ -11,6 +11,7 @@ app.controller('typeTemplateController', function ($scope, $controller, typeTemp
             }
         );
     };
+    //
 
     //分页
     $scope.findPage = function (page, rows) {
@@ -25,12 +26,21 @@ app.controller('typeTemplateController', function ($scope, $controller, typeTemp
     //查询实体
     $scope.findOne = function (id) {
         typeTemplateService.findOne(id).success(
+            //根据id查询回显数据
             function (response) {
+                //服务端返回的数据是json格式的字符串里面{/"xx:aa/"},{/"yy:bb/"}..
+                //不是json对象!!!
                 $scope.entity = response;
+                //所以要把这样的数据转换成json对象,
+                //然后回显数据
                 $scope.entity.brandIds = JSON.parse($scope.entity.brandIds);//转换品牌列表
                 $scope.entity.specIds = JSON.parse($scope.entity.specIds);//转换规格列表
                 $scope.entity.customAttributeItems = JSON.parse($scope.entity.customAttributeItems);//转换扩展属性
-
+                //也可以用angularJs将字符串形式的json数据转换成json对象
+                //fromJson从字符串转换成json对象
+               /* $scope.entity.brandIds=angular.fromJson($scope.entity.brandIds);
+                $scope.entity.specIds=angular.fromJson($scope.entity.specIds);
+                $scope.entity.customAttributeItems=angular.fromJson($scope.entity.customAttributeItems);*/
             }
         );
     };
@@ -98,6 +108,8 @@ app.controller('typeTemplateController', function ($scope, $controller, typeTemp
     $scope.findSpecificationList = function () {
         specificationService.selectOptionList().success(
             function (response) {
+                // response--->List<Map> list .
+                // 这样的格式 [{key1:value1},{key2:value2}...] list.get(1).get(key1)
                 $scope.specificationList = {data: response};
             }
         );

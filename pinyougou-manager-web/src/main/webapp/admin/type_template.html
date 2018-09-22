@@ -38,7 +38,8 @@
 </head>
 
 <!--body上面加上angularJs的app和controller-->
-<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="typeTemplateController" ng-init="findBrandList();findSpecificationList()">
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou"
+      ng-controller="typeTemplateController" ng-init="findBrandList();findSpecificationList()">
 <!-- .box-body -->
 
 <div class="box-header with-border">
@@ -67,8 +68,8 @@
         </div>
         <div class="box-tools pull-right">
             <div class="has-feedback">
-                分类模板名称：<input>
-                <button class="btn btn-default">查询</button>
+                分类模板名称：<input type="text" ng-model="searchEntity.name"/>
+                <button class="btn btn-default" ng-click="search(1,paginationConf.itemsPerPage)">查询</button>
             </div>
         </div>
         <!--工具栏/-->
@@ -90,7 +91,7 @@
             </thead>
             <tbody>
             <tr ng-repeat="entity in list">
-                <td><input type="checkbox" ng-click="updateSelection($event,entity.id)" ></td>
+                <td><input type="checkbox" ng-click="updateSelection($event,entity.id)" /></td>
                 <td>{{entity.id}}</td>
                 <td>{{entity.name}}</td>
                 <td>{{jsonToString(entity.brandIds,'text')}}</td>
@@ -98,7 +99,8 @@
                 <td>{{jsonToString(entity.customAttributeItems,'text')}}</td>
                 <!--<td></td>-->
                 <td class="text-center">
-                    <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal" ng-click="findOne(entity.id)">修改
+                    <button type="button" class="btn bg-olive btn-xs" data-toggle="modal"
+                            data-target="#editModal" ng-click="findOne(entity.id)">修改
                     </button>
                 </td>
             </tr>
@@ -135,16 +137,16 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">商品类型模板编辑</h3>
+                <h3 id="myModalLabel">模板类型模板编辑</h3>
             </div>
             <div class="modal-body">
 
                 <table class="table table-bordered table-striped" width="800px">
 
                     <tr>
-                        <td>商品类型</td>
+                        <td>模板类型名称</td>
                         <td>
-                            <input class="form-control" placeholder="商品类型" ng-model="entity.name">
+                            <input class="form-control" placeholder="模板类型名称" ng-model="entity.name">
                         </td>
                     </tr>
                     <tr>
