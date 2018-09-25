@@ -4,6 +4,8 @@ import com.pinyougou.pojo.TbSeller;
 import com.pinyougou.sellergoods.service.SellerService;
 import entity.PageResult;
 import entity.Result;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +21,10 @@ import java.util.List;
 @RequestMapping("/seller")
 public class SellerController {
 
-	@Reference
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Reference
 	private SellerService sellerService;
 	
 	/**
@@ -49,6 +54,8 @@ public class SellerController {
 	@RequestMapping("/add")
 	public Result add(@RequestBody TbSeller seller){
 		try {
+            //添加seller卖家时,设置一个加密的密码
+		    seller.setPassword(passwordEncoder.encode(seller.getPassword()));
 			sellerService.add(seller);
 			return new Result(true, "增加成功");
 		} catch (Exception e) {

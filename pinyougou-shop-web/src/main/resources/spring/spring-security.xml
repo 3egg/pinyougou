@@ -10,25 +10,41 @@
     <security:http pattern="/css/**" security="none"/>
     <security:http pattern="/img/**" security="none"/>
     <security:http pattern="/js/**" security="none"/>
-    <security:http pattern="//plugins/**" security="none"/>
+    <security:http pattern="/plugins/**" security="none"/>
+    <!--卖家注册时,需要放行这个url-->
     <security:http pattern="/seller/add.do" security="none"/>
 
-    <!--页面拦截规则-->
+    <!--
+        页面拦截规则
+        user-expression 不使用spEL表达式
+    -->
     <security:http use-expressions="false">
+        <!--解决favicon.ico的404没找到的问题-->
+        <security:intercept-url pattern="/assets/img/favicon.ico" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/**" access="ROLE_SELLER"/>
-        <security:form-login login-page="/shoplogin.html" default-target-url="/admin/index.html" authentication-failure-url="/shoplogin.html" always-use-default-target="true"/>
-        <security:csrf disabled="true"/>
+        <security:form-login
+                login-page="/shoplogin.html"
+                default-target-url="/admin/index.html"
+                authentication-failure-url="/shoplogin.html"
+                always-use-default-target="true"/>
         <security:headers>
+            <!--放过页面frame里面的页面-->
             <security:frame-options policy="SAMEORIGIN"/>
         </security:headers>
         <!--登出留着-->
         <security:logout/>
+        <!--跨站伪造请求-->
+        <security:csrf disabled="true"/>
     </security:http>
 
     <!--认证管理器-->
     <security:authentication-manager>
-        <security:authentication-provider user-service-ref="userDetailService"/>
+        <security:authentication-provider user-service-ref="userDetailService">
+            <!--认证管理器里面,认证授权的实现类里面设置解密方式-->
+            <security:password-encoder ref="passwordEncoder"/>
+        </security:authentication-provider>
     </security:authentication-manager>
+
     <bean class="com.pinyougou.shop.service.UserDetailServiceImpl" id="userDetailService">
         <!--把sellerService通过dubbo注入给userDetailsService里面-->
         <property name="sellerService" ref="sellerService"/>
@@ -39,8 +55,11 @@
     <dubbo:registry address="zookeeper://192.168.23.128:2181"/>
     <dubbo:reference id="sellerService" interface="com.pinyougou.sellergoods.service.SellerService"/>
 
-   <!-- <beans:bean class="com.pinyougou.shop.service.ShopUserDetailService" id="shopUserDetailService">
-        <beans:property name="sellerService" ref="sellerService"/>
-    </beans:bean>-->
+    <!-- <beans:bean class="com.pinyougou.shop.service.ShopUserDetailService" id="shopUserDetailService">
+         <beans:property name="sellerService" ref="sellerService"/>
+     </beans:bean>-->
+
+    <!--设置密码的解密方式-->
+    <bean class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" id="passwordEncoder"/>
 
 </beans>

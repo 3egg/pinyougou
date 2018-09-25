@@ -3,6 +3,7 @@ package com.pinyougou.shop.service;
 import com.pinyougou.pojo.TbSeller;
 import com.pinyougou.sellergoods.service.SellerService;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,7 +26,8 @@ public class UserDetailServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         System.out.println("passed UserServiceImpl");
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        //grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_SELLER"));
+        /*登陆成功就给这个用户加一个ROLE_SELLER的权限*/
+        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_SELLER"));
         TbSeller one = sellerService.findOne(username);
         if(one != null){//有这个对象
             if("1".equals(one.getStatus())){//状态为已审核
