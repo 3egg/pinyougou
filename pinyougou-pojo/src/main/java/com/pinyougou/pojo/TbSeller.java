@@ -4,53 +4,53 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class TbSeller implements Serializable {
-    private String sellerId;
+    private String sellerId;//商家id
 
-    private String name;
+    private String name;//公司名称
 
-    private String nickName;
+    private String nickName;//店铺名称
 
-    private String password;
+    private String password;//商家登陆密码
 
-    private String email;
+    private String email;//商家邮箱
 
-    private String mobile;
+    private String mobile;//公司手机
 
-    private String telephone;
+    private String telephone;//公司电话
 
-    private String status;
+    private String status;//状态
 
-    private String addressDetail;
+    private String addressDetail;//详细地址
 
-    private String linkmanName;
+    private String linkmanName;//联系人姓名
 
-    private String linkmanQq;
+    private String linkmanQq;//qq
 
-    private String linkmanMobile;
+    private String linkmanMobile;//联系人电话
 
     private String linkmanEmail;
 
-    private String licenseNumber;
+    private String licenseNumber;//营业执照
 
-    private String taxNumber;
+    private String taxNumber;//税务登记号码
 
     private String orgNumber;
 
-    private Long address;
+    private Long address;//公司地址
 
-    private String logoPic;
+    private String logoPic;//公司logo
 
-    private String brief;
+    private String brief;//简介
 
-    private Date createTime;
+    private Date createTime;//创建时间
 
-    private String legalPerson;
+    private String legalPerson;//法人
 
-    private String legalPersonCardId;
+    private String legalPersonCardId;//法人身份证
 
-    private String bankUser;
+    private String bankUser;//开户行账号名称
 
-    private String bankName;
+    private String bankName;//开户行
 
     private static final long serialVersionUID = 1L;
 
@@ -244,5 +244,35 @@ public class TbSeller implements Serializable {
 
     public void setBankName(String bankName) {
         this.bankName = bankName == null ? null : bankName.trim();
+    }
+
+    @Override
+    public String toString() {
+        return "TbSeller{" +
+                "sellerId='" + sellerId + '\'' +
+                ", name='" + name + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", status='" + status + '\'' +
+                ", addressDetail='" + addressDetail + '\'' +
+                ", linkmanName='" + linkmanName + '\'' +
+                ", linkmanQq='" + linkmanQq + '\'' +
+                ", linkmanMobile='" + linkmanMobile + '\'' +
+                ", linkmanEmail='" + linkmanEmail + '\'' +
+                ", licenseNumber='" + licenseNumber + '\'' +
+                ", taxNumber='" + taxNumber + '\'' +
+                ", orgNumber='" + orgNumber + '\'' +
+                ", address=" + address +
+                ", logoPic='" + logoPic + '\'' +
+                ", brief='" + brief + '\'' +
+                ", createTime=" + createTime +
+                ", legalPerson='" + legalPerson + '\'' +
+                ", legalPersonCardId='" + legalPersonCardId + '\'' +
+                ", bankUser='" + bankUser + '\'' +
+                ", bankName='" + bankName + '\'' +
+                '}';
     }
 }

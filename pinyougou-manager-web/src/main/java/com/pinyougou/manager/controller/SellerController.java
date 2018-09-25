@@ -74,12 +74,12 @@ public class SellerController {
 	
 	/**
 	 * 获取实体
-	 * @param id
+	 * @param sellerId
 	 * @return
 	 */
 	@RequestMapping("/findOne")
-	public TbSeller findOne(Long id){
-		return sellerService.findOne(id);		
+	public TbSeller findOne(String sellerId){
+		return sellerService.findOne(sellerId);
 	}
 	
 	/**
@@ -109,5 +109,16 @@ public class SellerController {
 	public PageResult search(@RequestBody TbSeller seller, int page, int rows  ){
 		return sellerService.findPage(seller, page, rows);		
 	}
+
+	@RequestMapping("/updateStatus")
+    public Result updateStatus (String sellerId,String status){
+        try {
+            sellerService.updateStatus(sellerId, status);
+            return new Result(true,"check succeed");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(true,"check failed");
+        }
+    }
 	
 }

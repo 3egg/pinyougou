@@ -63,12 +63,12 @@ public class SellerServiceImpl implements SellerService {
 	
 	/**
 	 * 根据ID获取实体
-	 * @param id
+	 * @param sellerId
 	 * @return
 	 */
 	@Override
-	public TbSeller findOne(Long id){
-		return sellerMapper.selectByPrimaryKey(id.toString());
+	public TbSeller findOne(String sellerId){
+		return sellerMapper.selectByPrimaryKey(sellerId);
 	}
 
 	/**
@@ -162,5 +162,15 @@ public class SellerServiceImpl implements SellerService {
 		Page<TbSeller> page= (Page<TbSeller>)sellerMapper.selectByExample(example);		
 		return new PageResult(page.getTotal(), page.getResult());
 	}
-	
+
+	//通过sellerId查到该商家
+    //然后修改该商家的状态
+    @Override
+    public void updateStatus(String sellerId, String status) {
+        TbSeller tbSeller = sellerMapper.selectByPrimaryKey(sellerId);
+        tbSeller.setStatus(status);
+        //修改了状态之后,就去更新数据库
+        sellerMapper.updateByPrimaryKey(tbSeller);
+    }
+
 }

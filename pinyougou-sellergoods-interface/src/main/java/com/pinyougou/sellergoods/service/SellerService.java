@@ -1,8 +1,8 @@
 package com.pinyougou.sellergoods.service;
-import java.util.List;
 import com.pinyougou.pojo.TbSeller;
-
 import entity.PageResult;
+
+import java.util.List;
 /**
  * 服务层接口
  * @author Administrator
@@ -38,10 +38,10 @@ public interface SellerService {
 
 	/**
 	 * 根据ID获取实体
-	 * @param id
+	 * @param sellerId
 	 * @return
 	 */
-	public TbSeller findOne(Long id);
+	public TbSeller findOne(String sellerId);
 	
 	
 	/**
@@ -57,5 +57,7 @@ public interface SellerService {
 	 * @return
 	 */
 	public PageResult findPage(TbSeller seller, int pageNum, int pageSize);
-	
+
+
+	void updateStatus(String sellerId, String status);
 }
