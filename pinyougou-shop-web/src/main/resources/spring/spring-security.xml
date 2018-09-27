@@ -50,9 +50,11 @@
         <property name="sellerService" ref="sellerService"/>
     </bean>
 
+    <bean class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" id="passwordEncoder"/>
+
     <!-- 引用dubbo服务 -->
     <dubbo:application name="pinyougou-shop-web"/>
-    <dubbo:registry address="zookeeper://192.168.23.128:2181"/>
+    <dubbo:registry address="zookeeper://192.168.25.133:2181"/>
     <dubbo:reference id="sellerService" interface="com.pinyougou.sellergoods.service.SellerService"/>
 
     <!-- <beans:bean class="com.pinyougou.shop.service.ShopUserDetailService" id="shopUserDetailService">
@@ -60,6 +62,5 @@
      </beans:bean>-->
 
     <!--设置密码的解密方式-->
-    <bean class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" id="passwordEncoder"/>
 
 </beans>

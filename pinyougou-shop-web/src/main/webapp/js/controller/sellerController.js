@@ -77,10 +77,11 @@ app.controller('sellerController' ,function($scope,$controller,sellerService){
 	};
 
 	$scope.add = function () {
+        //把entity对象提交给页面
         sellerService.add($scope.entity).success(
-            function (response) {
+            function (response) { //返回Result对象
                 if(response.success){
-                    location.href = "shoplogin.html";
+                    location.href = "shoplogin.html";//成功就跳转到品优购登陆页面
                 }else{
                     alert(response.message);
                 }

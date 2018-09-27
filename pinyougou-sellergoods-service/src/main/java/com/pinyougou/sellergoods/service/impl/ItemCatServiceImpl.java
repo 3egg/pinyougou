@@ -11,6 +11,7 @@ import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 服务实现层
@@ -96,5 +97,19 @@ public class ItemCatServiceImpl implements ItemCatService {
 		Page<TbItemCat> page= (Page<TbItemCat>)itemCatMapper.selectByExample(example);		
 		return new PageResult(page.getTotal(), page.getResult());
 	}
-	
+
+    @Override
+    public List<TbItemCat> findByParentId(Long parentId) {
+        TbItemCatExample example = new TbItemCatExample();
+        TbItemCatExample.Criteria criteria = example.createCriteria();
+        criteria.andParentIdEqualTo(parentId);
+        //拼接这个parentId这个条件,然后根据example条件查询
+        return itemCatMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<Map> selectTypeList() {
+	    //sql 语句 select type_id , name as text from tb_item_cat
+        return itemCatMapper.selectTypeList();
+    }
 }

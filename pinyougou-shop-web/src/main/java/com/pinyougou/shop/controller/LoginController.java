@@ -14,6 +14,7 @@ public class LoginController {
 
     @RequestMapping("/name")
     public Map name(){
+        //从spring-security上下文权限中获取到认证信息的name
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         Map<String,String> map = new HashMap<>();
         map.put("loginName", name);

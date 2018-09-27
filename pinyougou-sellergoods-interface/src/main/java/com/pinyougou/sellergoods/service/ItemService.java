@@ -1,8 +1,8 @@
 package com.pinyougou.sellergoods.service;
-import java.util.List;
 import com.pinyougou.pojo.TbItem;
-
 import entity.PageResult;
+
+import java.util.List;
 /**
  * 服务层接口
  * @author Administrator
@@ -57,5 +57,6 @@ public interface ItemService {
 	 * @return
 	 */
 	public PageResult findPage(TbItem item, int pageNum, int pageSize);
-	
+
+
 }

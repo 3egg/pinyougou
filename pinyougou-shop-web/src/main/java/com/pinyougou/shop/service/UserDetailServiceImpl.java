@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-//实现了spring-security这个接口
+//实现了spring-security这个UserDetailsService接口
 public class UserDetailServiceImpl implements UserDetailsService {
 
     //相当于@Reference

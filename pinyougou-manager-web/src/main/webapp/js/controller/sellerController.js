@@ -78,7 +78,7 @@ app.controller('sellerController', function ($scope, $controller, sellerService)
 
     $scope.updateStatus = function (sellerId, status) {
         sellerService.updateStatus(sellerId,status).success(
-            function (response) {
+            function (response) { // 返回Result
                 if(response.success){
                     $scope.reloadList();//刷新页面
                 }else{

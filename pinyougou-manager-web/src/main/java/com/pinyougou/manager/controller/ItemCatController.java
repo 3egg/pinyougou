@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
+
 /**
  * controller
  * @author Administrator
@@ -109,5 +111,16 @@ public class ItemCatController {
 	public PageResult search(@RequestBody TbItemCat itemCat, int page, int rows  ){
 		return itemCatService.findPage(itemCat, page, rows);		
 	}
+
+	@RequestMapping("/findByParentId")
+	public List<TbItemCat> findByParentId(Long parentId){
+	    return itemCatService.findByParentId(parentId);
+    }
+
+    //查找所有的typeId
+    @RequestMapping("/selectTypeList")
+    public List<Map> selectTypeList () {
+	    return itemCatService.selectTypeList();
+    }
 	
 }

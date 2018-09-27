@@ -12,6 +12,7 @@
         <module>pinyougou-common</module>
         <module>pinyougou-sellergoods-interface</module>
         <module>pinyougou-manager-web</module>
+        <!--<module>pinyougou-shop-web</module>-->
     </modules>
 
     <packaging>pom</packaging>

@@ -51,7 +51,7 @@ public class SellerController {
 	 * @param seller
 	 * @return
 	 */
-	@RequestMapping("/add")
+	@RequestMapping("/add")//entity 封装成一个json对象通过TbSeller对象来接收
 	public Result add(@RequestBody TbSeller seller){
 		try {
             //添加seller卖家时,设置一个加密的密码

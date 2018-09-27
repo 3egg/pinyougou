@@ -10,9 +10,9 @@
 
     <context-param>
         <param-name>contextConfigLocation</param-name>
+        <!--父容器-->
         <param-value>classpath:spring/spring-security.xml</param-value>
     </context-param>
-    <!--这里这是mvc,没有spring,所以不需要这个监听器-->
     <!--监听服务器的启动-->
     <listener>
         <listener-class>
