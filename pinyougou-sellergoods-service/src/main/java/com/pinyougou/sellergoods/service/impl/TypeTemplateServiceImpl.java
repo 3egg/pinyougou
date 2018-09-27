@@ -1,8 +1,12 @@
 package com.pinyougou.sellergoods.service.impl;
 import com.alibaba.dubbo.config.annotation.Service;
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.pinyougou.mapper.TbSpecificationOptionMapper;
 import com.pinyougou.mapper.TbTypeTemplateMapper;
+import com.pinyougou.pojo.TbSpecificationOption;
+import com.pinyougou.pojo.TbSpecificationOptionExample;
 import com.pinyougou.pojo.TbTypeTemplate;
 import com.pinyougou.pojo.TbTypeTemplateExample;
 import com.pinyougou.pojo.TbTypeTemplateExample.Criteria;
@@ -11,6 +15,7 @@ import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 服务实现层
@@ -22,6 +27,8 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 
 	@Autowired
 	private TbTypeTemplateMapper typeTemplateMapper;
+	@Autowired
+    private TbSpecificationOptionMapper specificationOptionMapper;
 	
 	/**
 	 * 查询全部
@@ -105,5 +112,27 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 		Page<TbTypeTemplate> page= (Page<TbTypeTemplate>)typeTemplateMapper.selectByExample(example);		
 		return new PageResult(page.getTotal(), page.getResult());
 	}
-	
+
+    @Override
+    public List<Map> findSpecList(Long id) {
+        //要到所有的规格明细的list
+        //先通过id找到对应的typeTemplate , 这个里面有个列名叫做 spec_ids
+        TbTypeTemplate tbTypeTemplate = typeTemplateMapper.selectByPrimaryKey(id);
+        List<Map> list = JSON.parseArray(tbTypeTemplate.getSpecIds(), Map.class);
+        for (Map map : list) {
+            //循环得到里面的spec_Ids数据
+            //然后查询spec_id得到对应的值
+            TbSpecificationOptionExample example = new TbSpecificationOptionExample();
+            TbSpecificationOptionExample.Criteria criteria = example.createCriteria();
+            //[{"id":27,"text":"网络"},{"id":32,"text":"机身内存"}]
+            //map.get("id")就可以获取到对应的27
+            criteria.andSpecIdEqualTo(new Long((Integer) map.get("id")));
+            //执行的sql select * from tb_specification_option where spec_id = 27;
+            List<TbSpecificationOption> tbSpecificationOptionList = specificationOptionMapper.selectByExample(example);
+
+            map.put("options", tbSpecificationOptionList);
+        }
+        return list;
+    }
+
 }

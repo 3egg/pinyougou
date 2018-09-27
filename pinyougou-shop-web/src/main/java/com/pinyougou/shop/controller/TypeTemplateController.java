@@ -1,4 +1,4 @@
-package com.pinyougou.manager.controller;
+package com.pinyougou.shop.controller;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.pinyougou.pojo.TbTypeTemplate;
 import com.pinyougou.sellergoods.service.TypeTemplateService;
@@ -112,9 +112,9 @@ public class TypeTemplateController {
 		return typeTemplateService.findPage(typeTemplate, page, rows);		
 	}
 
-	@RequestMapping("/findSpecList")
+    @RequestMapping("/findSpecList")
     public List<Map> findSpecList(Long id){
-	    return typeTemplateService.findSpecList(id);
+        return typeTemplateService.findSpecList(id);
     }
-
+	
 }
