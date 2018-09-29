@@ -45,4 +45,6 @@ public class Goods implements Serializable {
                 ", itemList=" + itemList +
                 '}';
     }
+
+
 }

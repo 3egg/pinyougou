@@ -115,9 +115,11 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 
     @Override
     public List<Map> findSpecList(Long id) {
+	    //这是是找到type_template里面的specId . 然后把这些数据交给页面
         //要到所有的规格明细的list
         //先通过id找到对应的typeTemplate , 这个里面有个列名叫做 spec_ids
         TbTypeTemplate tbTypeTemplate = typeTemplateMapper.selectByPrimaryKey(id);
+        //这里的map数据为[{"id":27,"text":"网络"},{"id":32,"text":"机身内存"}]
         List<Map> list = JSON.parseArray(tbTypeTemplate.getSpecIds(), Map.class);
         for (Map map : list) {
             //循环得到里面的spec_Ids数据
@@ -129,7 +131,8 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
             criteria.andSpecIdEqualTo(new Long((Integer) map.get("id")));
             //执行的sql select * from tb_specification_option where spec_id = 27;
             List<TbSpecificationOption> tbSpecificationOptionList = specificationOptionMapper.selectByExample(example);
-
+            //然后往map里面put数据格式变为
+            // [{"id":27,"text":"网络",options:[{"id":122,"optionName":"40英寸","orders":1,"specId":33},{...}]}]
             map.put("options", tbSpecificationOptionList);
         }
         return list;

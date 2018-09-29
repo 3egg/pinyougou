@@ -34,7 +34,7 @@
 </head>
 
 <body class="hold-transition skin-red sidebar-mini"
-      ng-app="pinyougou" ng-controller="goodsController" ng-init="selectItemCat1List()">
+      ng-app="pinyougou" ng-controller="goodsController" ng-init="selectItemCat1List();findOne()">
 
 <!-- 正文区域 -->
 <section class="content">
@@ -225,19 +225,23 @@
                     <div class="row data-type">
                         <div class="col-md-2 title">是否启用规格</div>
                         <div class="col-md-10 data">
-                            <input type="checkbox">
+                            <span ng-if="entity.goods.id != null">
+                                <input type="checkbox" ng-model="entity.goods.isEnableSpec"
+                                      ng-true-value="1" ng-false-value="0">
+                            </span>
                         </div>
                     </div>
                     <p>
 
-                    <div>
-                    {{entity.goodsDesc.specificationItems}}
-                    <br/>
-                    {{entity.itemList}}
+                    <div ng-if="entity.goods.isEnableSpec">
+                        {{entity.goodsDesc.specificationItems}}
+                        <br/>
+                        {{entity.itemList}}
                         <div class="row data-type">
                             <!--
                                 规格选项的单选框
-                                这里的specList是List<Map> [{"id":27,"text":"网络"},{"id":32,"text":"机身内存"}]
+                                这里的specList是List<Map>
+                                [{"id":27,"text":"网络",options:[{"id":122,"optionName":"40英寸","orders":1,"specId":33},{...}]}]
                                 这里的map的key就是 id 或者 text
                             -->
                             <div ng-repeat="pojo in specList">
@@ -248,11 +252,14 @@
                                         event负责触发点击事件,pojo.text显示的值 即网络
                                         optionName是外面页面显示给用户的值
                                         List<Map> 这里的map的key就是options了
-                                        这里循环的数据为 [{id:98,option_name:xxx,spec_id:27,orders:1}]
+                                        这里循环的数据为
+                                        options:[{"id":122,"optionName":"40英寸","orders":1,"specId":33},{...}]
                                     -->
+                                    <!--options:[{"id":122,"optionName":"40英寸","orders":1,"specId":33},{...}]-->
                                     <span ng-repeat="option in pojo.options">
                                         <input type="checkbox"
                                                ng-click="updateSpecAttribute($event,pojo.text,option.optionName);createItemList()"
+                                               ng-checked="checkAttributeValue(pojo.text,option.optionName)"
                                         >{{option.optionName}}
                                     </span>
                                     <!--<span>
@@ -310,72 +317,14 @@
                                         <input class="form-control" ng-model="pojo.num" placeholder="库存数量">
                                     </td>
                                     <td>
-                                        <input type="checkbox" ng-model="pojo.status" ng-true-value="1" ng-false-value="0">
+                                        <input type="checkbox" ng-model="pojo.status" ng-true-value="1"
+                                               ng-false-value="0">
                                     </td>
                                     <td>
-                                        <input type="checkbox" ng-model="pojo.isDefault" ng-true-value="1" ng-false-value="0">
+                                        <input type="checkbox" ng-model="pojo.isDefault" ng-true-value="1"
+                                               ng-false-value="0">
                                     </td>
                                 </tr>
-                                <!--<tr>
-                                    <td>
-                                        4.0
-                                    </td>
-                                    <td>
-                                        4G
-                                    </td>
-                                    <td>
-                                        <input class="form-control" placeholder="价格">
-                                    </td>
-                                    <td>
-                                        <input class="form-control" placeholder="库存数量">
-                                    </td>
-                                    <td>
-                                        <input type="checkbox">
-                                    </td>
-                                    <td>
-                                        <input type="checkbox">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        5.0
-                                    </td>
-                                    <td>
-                                        3G
-                                    </td>
-                                    <td>
-                                        <input class="form-control" placeholder="价格">
-                                    </td>
-                                    <td>
-                                        <input class="form-control" placeholder="库存数量">
-                                    </td>
-                                    <td>
-                                        <input type="checkbox">
-                                    </td>
-                                    <td>
-                                        <input type="checkbox">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        5.0
-                                    </td>
-                                    <td>
-                                        4G
-                                    </td>
-                                    <td>
-                                        <input class="form-control" placeholder="价格">
-                                    </td>
-                                    <td>
-                                        <input class="form-control" placeholder="库存数量">
-                                    </td>
-                                    <td>
-                                        <input type="checkbox">
-                                    </td>
-                                    <td>
-                                        <input type="checkbox">
-                                    </td>
-                                </tr>-->
 
                                 </tbody>
                             </table>
@@ -394,8 +343,8 @@
 
     </div>
     <div class="btn-toolbar list-toolbar">
-        <button class="btn btn-primary" ng-click="add()"><i class="fa fa-save"></i>保存</button>
-        <button class="btn btn-default">返回列表</button>
+        <button class="btn btn-primary" ng-click="save()"><i class="fa fa-save"></i>保存</button>
+        <a href="goods.html" class="btn btn-default">返回列表</a>
     </div>
 
 </section>
