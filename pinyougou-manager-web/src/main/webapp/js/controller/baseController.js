@@ -55,6 +55,17 @@ app.controller('baseController', function ($scope) {
             str = str.substring(0, str.length - 1);//把最后一位移除
         }
         return str;//最后返回这个str拼接好的后字符串*/
+    };
+
+    //从集合中按照key查询对象
+    $scope.searchObjectByKey = function (list, key, keyValue) {
+        //第一进来这个方法是返回的绝对是一个null
+        for (var i = 0; i < list.length; i++) {
+            if(list[i][key] == keyValue){
+                return list[i];
+            }
+        }
+        return null;
     }
 
 });	

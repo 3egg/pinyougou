@@ -22,6 +22,7 @@
     <script type="text/javascript" src="../js/base_pagination.js"></script>
     <script type="text/javascript" src="../js/service/goodsService.js"></script>
     <script type="text/javascript" src="../js/service/itemCatService.js"></script>
+    <script type="text/javascript" src="../js/service/typeTemplateService.js"></script>
     <script type="text/javascript" src="../js/controller/baseController.js"></script>
     <script type="text/javascript" src="../js/controller/goodsController.js"></script>
 
@@ -91,7 +92,8 @@
                     </span>
                 </td>
                 <td class="text-center">
-                    <button type="button" class="btn bg-olive btn-xs">详情</button>
+                   <!-- <button type="button" class="btn bg-olive btn-xs">详情</button>-->
+                    <a href="goods_edit.html#?id={{entity.id}}" class="btn bg-olive btn-xs">详情</a>
                 </td>
             </tr>
             </tbody>

@@ -236,6 +236,7 @@ public class GoodsServiceImpl implements GoodsService {
 
     @Override
     public void updateStatus(Long[] ids, String status) {
+        //根据页面传过来对应的status : 1,2,3修改数据库对应的值
         // update tb_goods set status = status where id in (1,2,3)
         TbGoodsExample example = new TbGoodsExample();
         // where id in (1,2,3)
@@ -244,7 +245,7 @@ public class GoodsServiceImpl implements GoodsService {
         // set tb_goods.status = status
         goods.setAuditStatus(status);
         goodsMapper.updateByExampleSelective(goods, example);
-        /*for (Long id : ids) {
+        /*for (Long id : ids) { 第二张方案循环一条条的改
             TbGoods goods = goodsMapper.selectByPrimaryKey(id);
             goods.setAuditStatus(status);
             goodsMapper.updateByPrimaryKey(goods);

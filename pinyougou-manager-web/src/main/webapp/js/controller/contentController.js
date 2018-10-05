@@ -1,5 +1,5 @@
  //控制层 
-app.controller('contentController' ,function($scope,$controller   ,contentService){	
+app.controller('contentController' ,function($scope,$controller,contentService,uploadService,contentCategoryService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -10,7 +10,7 @@ app.controller('contentController' ,function($scope,$controller   ,contentServic
 				$scope.list=response;
 			}			
 		);
-	}    
+	};
 	
 	//分页
 	$scope.findPage=function(page,rows){			
@@ -20,7 +20,7 @@ app.controller('contentController' ,function($scope,$controller   ,contentServic
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}			
 		);
-	}
+	};
 	
 	//查询实体 
 	$scope.findOne=function(id){				
@@ -29,7 +29,7 @@ app.controller('contentController' ,function($scope,$controller   ,contentServic
 				$scope.entity= response;					
 			}
 		);				
-	}
+	};
 	
 	//保存 
 	$scope.save=function(){				
@@ -49,7 +49,7 @@ app.controller('contentController' ,function($scope,$controller   ,contentServic
 				}
 			}		
 		);				
-	}
+	};
 	
 	 
 	//批量删除 
@@ -62,7 +62,7 @@ app.controller('contentController' ,function($scope,$controller   ,contentServic
 				}						
 			}		
 		);				
-	}
+	};
 	
 	$scope.searchEntity={};//定义搜索对象 
 	
@@ -74,6 +74,34 @@ app.controller('contentController' ,function($scope,$controller   ,contentServic
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}			
 		);
-	}
-    
+	};
+
+    //上传广告图
+    $scope.uploadFile=function(){
+        uploadService.uploadFile().success(
+            function(response){
+                if(response.success){
+                    $scope.entity.pic=response.message;
+                }else{
+                    alert("上传失败！");
+                }
+            }
+        ).error(
+            function(){
+                alert("上传出错！");
+            }
+        );
+    };
+
+        $scope.status=["无效","有效"];
+    //加载广告分类列表
+    $scope.findContentCategoryList = function () {
+        contentCategoryService.findAll().success(
+            function (response) {
+                $scope.contentCategoryList = response;
+            }
+        );
+    };
+
+
 });	
