@@ -6,7 +6,7 @@
 
     <!--配置security,先把一些静态资源全部放行-->
     <security:http pattern="/login.html" security="none"/>
-    <security:http pattern="/admin/**" security="none"/>
+   <!-- <security:http pattern="/admin/**" security="none"/>-->
     <security:http pattern="/css/**" security="none"/>
     <security:http pattern="/img/**" security="none"/>
     <security:http pattern="/js/**" security="none"/>

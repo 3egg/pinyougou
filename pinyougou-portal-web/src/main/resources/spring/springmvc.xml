@@ -13,7 +13,7 @@
     <!--超时-->
     <dubbo:consumer timeout="10000000"/>
     <!--引用服务 通过注解 @reference 扫描 即可引用 包含了组件扫描-->
-    <dubbo:annotation package="com.pinyougou.manager.controller"/>
+    <dubbo:annotation package="com.pinyougou.portal.controller"/>
 
     <!--注解驱动并设置统一日期的输出格式-->
     <mvc:annotation-driven>

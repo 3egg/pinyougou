@@ -14,18 +14,17 @@
     <link rel="stylesheet" href="../css/style.css">
     <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
     <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
-    <!--angularJs的类库-->
-    <script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
-    <!--分页组件-->
+    <script type="text/javascript" src="../plugins/angularjs/angular.min.js">  </script>
+    <!-- 分页组件开始 -->
     <script src="../plugins/angularjs/pagination.js"></script>
     <link rel="stylesheet" href="../plugins/angularjs/pagination.css">
-    <script type="text/javascript" src="../js/base_pagination.js"></script>
-    <script type="text/javascript" src="../js/controller/baseController.js"></script>
-    <!--上传service-->
-    <script type="text/javascript" src="../js/service/contentService.js"></script>
-    <script type="text/javascript" src="../js/service/uploadService.js"></script>
-    <script type="text/javascript" src="../js/service/contentCategoryService.js"></script>
-    <script type="text/javascript" src="../js/controller/contentController.js"></script>
+    <!-- 分页组件结束 -->
+    <script type="text/javascript" src="../js/base_pagination.js">  </script>
+    <script type="text/javascript" src="../js/service/contentService.js">  </script>
+    <script type="text/javascript" src="../js/service/uploadService.js">  </script>
+    <script type="text/javascript" src="../js/service/contentCategoryService.js">  </script>
+    <script type="text/javascript" src="../js/controller/baseController.js">  </script>
+    <script type="text/javascript" src="../js/controller/contentController.js">  </script>
 
 
 </head>
@@ -50,7 +49,7 @@
                     <button type="button" class="btn btn-default" title="新建" data-toggle="modal" ng-click="entity={}"
                             data-target="#editModal"><i class="fa fa-file-o"></i> 新建
                     </button>
-                    <button type="button" class="btn btn-default" title="删除"><i class="fa fa-trash-o"></i> 删除</button>
+                    <button type="button" class="btn btn-default" title="删除" ng-click="dele()"><i class="fa fa-trash-o"></i> 删除</button>
                     <button type="button" class="btn btn-default" title="开启" onclick='confirm("你确认要开启吗？")'><i
                             class="fa fa-check"></i> 开启
                     </button>
@@ -100,7 +99,8 @@
                 <td>{{pojo.sortOrder}}</td>
                 <td>{{status[pojo.status]}}</td>
                 <td class="text-center">
-                    <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal">修改
+                    <button type="button" class="btn bg-olive btn-xs" data-toggle="modal"
+                            ng-click="findOne(pojo.id)" data-target="#editModal">修改
                     </button>
                 </td>
             </tr>
@@ -152,15 +152,19 @@
                         <td>
                             <table>
                                 <tr>
-                                    <td>
+                                    <!--<td>
                                         <input type="file" id="file" name="file"/>
                                         <button class="btn btn-primary" ng-click="uploadFile()" type="button">
                                             上传
                                         </button>
-                                    </td>
+                                    </td>-->
                                     <td>
-                                        <img src="{{entity.pic}}" alt="" width="200px" height="100px">
+                                        <input type="file" id="file">
+                                        <button ng-click="uploadFile()">上传</button>
+                                        <img alt="" src="{{entity.pic}}" width="200px" height="100px">
+                                       <!-- <img src="{{entity.pic}}" alt="" width="200px" height="100px">-->
                                     </td>
+
                                 </tr>
                             </table>
                         </td>
