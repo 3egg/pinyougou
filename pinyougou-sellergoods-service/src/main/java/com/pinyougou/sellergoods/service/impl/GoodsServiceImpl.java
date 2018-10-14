@@ -252,6 +252,16 @@ public class GoodsServiceImpl implements GoodsService {
         }*/
     }
 
+    @Override
+    public List<TbItem> findItemListByGoodsIdandStatus(Long[] goodsIds, String status) {
+        TbItemExample example = new TbItemExample();
+        TbItemExample.Criteria criteria = example.createCriteria();
+        criteria.andGoodsIdIn(Arrays.asList(goodsIds));
+        criteria.andStatusEqualTo(status);
+        List<TbItem> tbItems = itemMapper.selectByExample(example);
+        return tbItems;
+    }
+
 
     private void setItemValues(Goods goods, TbItem item) {
         item.setGoodsId(goods.getGoods().getId());//商品SPU编号

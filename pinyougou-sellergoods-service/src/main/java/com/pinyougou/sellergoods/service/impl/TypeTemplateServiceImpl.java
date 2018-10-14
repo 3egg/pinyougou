@@ -13,6 +13,7 @@ import com.pinyougou.pojo.TbTypeTemplateExample.Criteria;
 import com.pinyougou.sellergoods.service.TypeTemplateService;
 import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,10 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 	private TbTypeTemplateMapper typeTemplateMapper;
 	@Autowired
     private TbSpecificationOptionMapper specificationOptionMapper;
-	
+	@Autowired
+    private RedisTemplate redisTemplate;
+
+
 	/**
 	 * 查询全部
 	 */
@@ -45,6 +49,8 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 	public PageResult findPage(int pageNum, int pageSize) {
 		PageHelper.startPage(pageNum, pageSize);		
 		Page<TbTypeTemplate> page=   (Page<TbTypeTemplate>) typeTemplateMapper.selectByExample(null);
+		//调用缓存,把数据存入缓存
+        saveToRedis();
 		return new PageResult(page.getTotal(), page.getResult());
 	}
 
@@ -109,7 +115,8 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
 	
 		}
 		
-		Page<TbTypeTemplate> page= (Page<TbTypeTemplate>)typeTemplateMapper.selectByExample(example);		
+		Page<TbTypeTemplate> page= (Page<TbTypeTemplate>)typeTemplateMapper.selectByExample(example);
+		saveToRedis();
 		return new PageResult(page.getTotal(), page.getResult());
 	}
 
@@ -138,4 +145,31 @@ public class TypeTemplateServiceImpl implements TypeTemplateService {
         return list;
     }
 
+    /**
+     * 将数据存入缓存
+     */
+    private void saveToRedis(){
+        List<TbTypeTemplate> tbTypeTemplateList = findAll();
+        for (TbTypeTemplate tbTypeTemplate : tbTypeTemplateList) {
+            List<Map> brandList = JSON.parseArray(tbTypeTemplate.getBrandIds(), Map.class);
+            //hash大key为brandList , field为模块id,存的值value为品牌的名称
+            //[{"id":1,"text":"联想"},{"id":3,"text":"三星"},{...}]
+            redisTemplate.boundHashOps("brandList").put(tbTypeTemplate.getId(),brandList);
+
+            //根据模块id查询到对应的规格列表,大kye为specList,field为模块id,value为specList
+            //[{"id":27,"text":"网络"},{"id":32,"text":"机身内存"}]
+            //需要这样的数据[{"id":27,"text":"网络",options:[{"id":122,"optionName":"40英寸","orders":1,"specId":33},{...}]}]
+            List<Map> specList = findSpecList(tbTypeTemplate.getId());
+            redisTemplate.boundHashOps("specList").put(tbTypeTemplate.getId(), specList);
+        }
+    }
 }
+
+
+
+
+
+
+
+
+

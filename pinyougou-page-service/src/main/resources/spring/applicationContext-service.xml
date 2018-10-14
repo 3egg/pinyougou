@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!--给这个服务应用一个名称 , 这个是生产页码静态化的服务即freeMarker-->
+    <dubbo:application name="pinyougou-page-service"/>
+    <!--配置该服务在这个133:2181端口注册服务-->
+    <dubbo:registry address="192.168.25.133:2181" protocol="zookeeper"/>
+    <!--配置超时-->
+    <dubbo:provider timeout="10000000" />
+    <!--配置dubbo的生产服务端口-->
+    <dubbo:protocol name="dubbo" port="20883"/>
+    <!--扫包-->
+    <dubbo:annotation package="com.pinyougou.page.service"/>
+
+    <!--配置freemarker和spring的整合-->
+    <bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath" value="/WEB-INF/template"/>
+        <property name="defaultEncoding" value="utf-8"/>
+    </bean>
+
+</beans>

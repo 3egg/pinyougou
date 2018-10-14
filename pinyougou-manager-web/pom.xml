@@ -41,6 +41,12 @@
             <artifactId>pinyougou-sellergoods-interface</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <!--搜索服务-->
+        <!--<dependency>
+            <groupId>com.pinyougou</groupId>
+            <artifactId>pinyougou-search-interface</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>-->
 
         <!--content内容服务-->
         <dependency>
@@ -112,6 +118,16 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>activemq-client</artifactId>
+            <version>5.14.5</version>
         </dependency>
 
 

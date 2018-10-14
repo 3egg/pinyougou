@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--这里是消费通过manager-web生产的消息-->
+    <!--通过jms的activemq来发送消息,这里就去配置这个connectFactory-->
+    <bean class="org.apache.activemq.ActiveMQConnectionFactory" id="targetConnectionFactory">
+        <!--brokerUrl对应的activemq服务的ip-->
+        <property name="brokerURL" value="tcp://192.168.25.133:61616"/>
+    </bean>
+
+    <!--通过spring管理的connectionFactory的bean来管理activemq的connectionFactory的这个bean-->
+    <bean class="org.springframework.jms.connection.SingleConnectionFactory">
+        <!--通过spring的connectionFactory来对应的真实jms connection 的connectFactory-->
+        <property name="targetConnectionFactory" ref="targetConnectionFactory"/>
+    </bean>
+
+    <!--创建一个更新solr库的bean-->
+    <bean id="solr_update_item_queue" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg value="solr_update_item_queue"/>
+    </bean>
+
+    <!--配置一个监听生产者的容器listener-->
+    <bean class="com.pinyougou.page.listener.GenHtmlListener" id="genHtmlListener"/>
+
+    <!--配置监听容器-->
+    <!--<bean id="solr_update_Listener" class="com.pinyougou.search.listener.SolrUpdateListener"></bean>-->
+
+
+    <!--配置监听器 消费者监听生产者-->
+    <bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="targetConnectionFactory"/>
+        <property name="destination" ref="solr_update_item_queue"/>
+        <!--<property name="messageListener" ref=""/>-->
+     </bean>
+</beans>

@@ -9,6 +9,7 @@ import com.pinyougou.pojo.TbItemCatExample.Criteria;
 import com.pinyougou.sellergoods.service.ItemCatService;
 import entity.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,10 @@ public class ItemCatServiceImpl implements ItemCatService {
 
 	@Autowired
 	private TbItemCatMapper itemCatMapper;
-	
+
+	@Autowired
+    private RedisTemplate redisTemplate;
+
 	/**
 	 * 查询全部
 	 */
@@ -103,6 +107,12 @@ public class ItemCatServiceImpl implements ItemCatService {
         TbItemCatExample example = new TbItemCatExample();
         TbItemCatExample.Criteria criteria = example.createCriteria();
         criteria.andParentIdEqualTo(parentId);
+        //每次查询的时候,读取缓存进行存储 增删改都要执行这个方法???
+        List<TbItemCat> list = findAll();
+        for (TbItemCat itemCat : list) {
+            //itemCat为大key,itemCat.getName()为field分类名,itemCat.getTypeId()为value模块id
+            redisTemplate.boundHashOps("itemCat").put(itemCat.getName(), itemCat.getTypeId());
+        }
         //拼接这个parentId这个条件,然后根据example条件查询
         return itemCatMapper.selectByExample(example);
     }

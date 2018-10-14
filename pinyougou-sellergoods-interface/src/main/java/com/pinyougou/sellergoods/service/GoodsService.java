@@ -1,6 +1,7 @@
 package com.pinyougou.sellergoods.service;
 
 import com.pinyougou.pojo.TbGoods;
+import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojogroup.Goods;
 import entity.PageResult;
 
@@ -62,5 +63,7 @@ public interface GoodsService {
 
 	//根据页面传过来的状态,更改对应的审核状态
     public void updateStatus(Long[] ids,String status);
+
+    public List<TbItem> findItemListByGoodsIdandStatus(Long[] goodsIds,String status);
 
 }

@@ -1,15 +1,25 @@
 package com.pinyougou.manager.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.fastjson.JSON;
 import com.pinyougou.pojo.TbGoods;
+import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojogroup.Goods;
 import com.pinyougou.sellergoods.service.GoodsService;
 import entity.PageResult;
 import entity.Result;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
 import java.util.List;
 /**
  * controller
@@ -22,6 +32,13 @@ public class GoodsController {
 
 	@Reference
 	private GoodsService goodsService;
+	/*@Reference
+    private ItemSearchService itemSearchService;*/
+	@Resource(name = "queueSolrSearchDestination")
+    private Destination queueSolrDestination;//注入mq的destination
+
+    @Autowired
+    private JmsTemplate jmsTemplate;
 	
 	/**
 	 * 返回全部列表
@@ -83,7 +100,10 @@ public class GoodsController {
 	public Goods findOne(Long id){
 		return goodsService.findOne(id);		
 	}
-	
+
+	@Resource(name = "queueSolrDeleteDestination")
+    private Destination queueSolrDeleteDestination;
+
 	/**
 	 * 批量删除
 	 * @param ids
@@ -93,6 +113,8 @@ public class GoodsController {
 	public Result delete(Long [] ids){
 		try {
 			goodsService.delete(ids);
+			jmsTemplate.convertAndSend(queueSolrDeleteDestination,ids);
+			//itemSearchService.deleteByGoodsIds(Arrays.asList(ids));
 			return new Result(true, "删除成功"); 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -117,6 +139,29 @@ public class GoodsController {
 	//更新状态
         try {
             goodsService.updateStatus(ids, status);
+            //更新了商品,就要同时更新索引库
+            if("1".equals(status)){//审核通过
+                List<TbItem> itemList = goodsService.findItemListByGoodsIdandStatus(ids, status);
+                //List<TbItem> itemList = itemListByGoodsIdandStatus;
+                if(itemList != null && itemList.size() > 0){
+                    final String jsonString = JSON.toJSONString(itemList);
+                    jmsTemplate.send(queueSolrDestination, new MessageCreator() {
+                        @Override
+                        public Message createMessage(Session session) throws JMSException {
+                            return session.createTextMessage(jsonString);
+                        }
+                    });
+                    //jmsTemplate.convertAndSend(queueSolrDestination,  itemList);
+                }
+            }
+           /* if(status.equals("1")){//审核通过
+                List<TbItem> itemList = goodsService.findItemListByGoodsIdandStatus(ids, status);
+                if(itemList != null && itemList.size() > 0){
+                    itemSearchService.importList(itemList);
+                }else {
+                    System.out.println("没有明细数据");
+                }
+            }*/
             return new Result(true,"succeed");
         } catch (Exception e) {
             e.printStackTrace();

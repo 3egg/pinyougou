@@ -9,7 +9,7 @@
     <!--预读取spring-security.xml-->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:spring/spring-security.xml</param-value>
+        <param-value>classpath:spring/spring-*.xml</param-value>
     </context-param>
 
     <!--监听服务器的启动,这个监听器给上面的security使用-->

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--配置activemq的服务,这个作为生产消息的服务,创建这个connectionFactory-->
+    <bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+        <property name="brokerURL" value="tcp://192.168.25.133:61616"/>
+    </bean>
+    <!--spring管理真正的connectionFactory的connection-->
+    <!--即spring把connectionFactory交给spring管理-->
+    <bean class="org.springframework.jms.connection.SingleConnectionFactory" id="connectionFactory">
+        <property name="targetConnectionFactory" ref="targetConnectionFactory"/>
+    </bean>
+    <!--创建jmsTemplate用于发送和接受mq的消息-->
+    <bean class="org.springframework.jms.core.JmsTemplate" id="jmsTemplate">
+        <!--把spring的connection交给jmsTemplate-->
+        <property name="connectionFactory" ref="connectionFactory"/>
+    </bean>
+    <!--只要一处修改solr索引库即可,这里就配置点对点的格式,只要一处收到消息后就把内容清空-->
+    <bean class="org.apache.activemq.command.ActiveMQQueue" id="queueSolrSearchDestination">
+        <constructor-arg value="pinyougou_queue_solr"/>
+    </bean>
+
+    <!--删除的消息-->
+    <bean class="org.apache.activemq.command.ActiveMQQueue" id="queueSolrDeleteDestination">
+        <constructor-arg value="pinyougou_queue_solr_delete"/>
+    </bean>
+
+</beans>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--消费者这边也要配置connectionFactory,有对应的jms服务厂商提供-->
+    <bean class="org.apache.activemq.ActiveMQConnectionFactory" id="targetConnectionFactory">
+        <property name="brokerURL" value="tcp://192.168.25.133:61616"/>
+    </bean>
+    <!--spring来管理这个connectionFactory-->
+    <bean class="org.springframework.jms.connection.SingleConnectionFactory" id="connectionFactory">
+        <property name="targetConnectionFactory" ref="targetConnectionFactory"/>
+    </bean>
+
+    <!--生产者是点对点的传输 , 这里也配置点对点的传输-->
+    <bean id="queueSolrDestination" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg value="pinyougou_queue_solr"/>
+    </bean>
+    <!--然后来一个监听器监听生产消息的一方生产的消息-->
+    <bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="destination" ref="queueSolrDestination"/>
+        <property name="messageListener" ref="itemSearchListener"/>
+    </bean>
+    <!--监听商品修改消息的监听器-->
+    <bean id="itemSearchListener" class="com.pinyougou.search.service.listener.ItemSearchListener"/>
+
+    <!--这里的queue和生产者对应的值要一致,即id和对应的构造方法里面的value-->
+    <bean class="org.apache.activemq.command.ActiveMQQueue" id="queueSolrDeleteDestination">
+        <constructor-arg value="pinyougou_queue_solr_delete"/>
+    </bean>
+    <!--消息监听容器(删除索引库的记录),监听删除的消息-->
+    <bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <!--把地址根据上面配置的queueSolrDeleteDestination来监听地址-->
+        <property name="destination" ref="queueSolrDeleteDestination"/>
+        <!--删除消息的监听器实现类-->
+        <property name="messageListener" ref="itemDeleteListener"/>
+    </bean>
+    <bean id="itemDeleteListener" class="com.pinyougou.search.service.listener.ItemDeleteListener"/>
+
+</beans>
